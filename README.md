@@ -23,5 +23,5 @@ Example output of `botsay -- $(fortune)`:
 ## General info
 
 * License: MIT
-* Version: 1.0
+* Version: 1.0.1
 * Author: Alexander F. Rødseth &lt;xyproto@archlinux.org&gt;
