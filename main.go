@@ -8,7 +8,10 @@ import (
 	"unicode"
 )
 
-const boxContentWidth = 40
+const (
+	boxContentWidth = 40
+	versionString   = "botsay 1.0.0"
+)
 
 type GFX struct {
 	ascii string
@@ -212,6 +215,15 @@ func main() {
 	args := os.Args[1:]
 	if len(args) > 0 && args[0] == "--" {
 		args = args[1:]
+	}
+	if len(args) > 0 {
+		if args[0] == "--help" {
+			fmt.Println("usage: botsay [TEXT]")
+			return
+		} else if args[0] == "--version" {
+			fmt.Println(versionString)
+			return
+		}
 	}
 	fmt.Println(botsay(strings.Join(args, " ")))
 }
