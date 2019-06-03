@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/mattes/go-asciibot"
+	"io/ioutil"
 	"os"
 	"strings"
 	"unicode"
@@ -10,15 +11,31 @@ import (
 
 const (
 	boxContentWidth = 42
-	versionString   = "botsay 1.0.1"
+	versionString   = "botsay 1.1.0"
 )
 
+// GFX is ASCII graphics as a string, and where to place it on the canvas
 type GFX struct {
 	ascii string
 	x     int
 	y     int
 }
 
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+// New creates a new GFX struct, with an ASCII art string and a position
 func New(ascii string, x, y int) *GFX {
 	return &GFX{ascii, x, y}
 }
@@ -46,33 +63,19 @@ func bubble(w, h int) string {
 
 // Return the width and height of a given ASCII art string
 func size(s string) (int, int) {
-	max_width := 0
-	max_height := 0
-	line_counter := 0
+	maxWidth := 0
+	maxHeight := 0
+	lineCounter := 0
 	for _, line := range strings.Split(s, "\n") {
-		if len(line) > max_width {
-			max_width = len(line)
+		if len(line) > maxWidth {
+			maxWidth = len(line)
 		}
-		line_counter++
+		lineCounter++
 	}
-	if line_counter > max_height {
-		max_height = line_counter
+	if lineCounter > maxHeight {
+		maxHeight = lineCounter
 	}
-	return max_width, max_height
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	return maxWidth, maxHeight
 }
 
 // Return a character at (x,y) in a multiline string.
@@ -89,9 +92,8 @@ func get(s string, x, y int) string {
 		if i == y {
 			if x < len(line) {
 				return string(line[x])
-			} else {
-				return " "
 			}
+			return " "
 		}
 	}
 	return " "
@@ -99,13 +101,13 @@ func get(s string, x, y int) string {
 
 // Like a blit function, but for ASCII graphics. Uses " " as the "transparent pixel".
 func combine(a, b string, xoffset, yoffset int) string {
-	a_w, a_h := size(a)
-	b_w, b_h := size(b)
-	max_w := max(a_w, b_w+xoffset)
-	max_h := max(a_h, b_h+yoffset)
+	aW, aH := size(a)
+	bW, bH := size(b)
+	maxW := max(aW, bW+xoffset)
+	maxH := max(aH, bH+yoffset)
 	var sb strings.Builder
-	for y := 0; y < max_h; y++ {
-		for x := 0; x < max_w; x++ {
+	for y := 0; y < maxH; y++ {
+		for x := 0; x < maxW; x++ {
 			if get(b, x-xoffset, y-yoffset) == " " {
 				sb.WriteString(get(a, x, y))
 			} else {
@@ -124,32 +126,6 @@ func render(layers []*GFX) string {
 		canvas = combine(canvas, gfx.ascii, gfx.x, gfx.y)
 	}
 	return canvas
-}
-
-// Split a string by words, then combine to form lines maximum w long
-func splitWidthWords(s string, w int) []string {
-	var sl []string
-	var line string
-	for _, word := range splitWords(s) {
-		if len(line)+len(word) < w {
-			line += word
-		} else {
-			trimmedLine := strings.TrimSpace(line)
-			if strings.HasSuffix(trimmedLine, "--") {
-				// Move the double dash to the beginning of the next line
-				trimmedLine = trimmedLine[:len(trimmedLine)-2]
-				sl = append(sl, trimmedLine)
-				line = "-- " + word
-			} else {
-				sl = append(sl, trimmedLine)
-				line = word
-			}
-		}
-	}
-	if len(line) > 0 {
-		sl = append(sl, strings.TrimSpace(line))
-	}
-	return sl
 }
 
 // Split a string into words, keepin punctuation and trailing spaces
@@ -196,15 +172,42 @@ func splitWords(s string) []string {
 	return words
 }
 
+// Split a string by words, then combine to form lines maximum w long
+func splitWidthWords(s string, w int) []string {
+	var sl []string
+	var line string
+	for _, word := range splitWords(s) {
+		if len(line)+len(word) < w {
+			line += word
+		} else {
+			trimmedLine := strings.TrimSpace(line)
+			if strings.HasSuffix(trimmedLine, "--") {
+				// Move the double dash to the beginning of the next line
+				trimmedLine = trimmedLine[:len(trimmedLine)-2]
+				sl = append(sl, trimmedLine)
+				line = "-- " + word
+			} else {
+				sl = append(sl, trimmedLine)
+				line = word
+			}
+		}
+	}
+	if len(line) > 0 {
+		sl = append(sl, strings.TrimSpace(line))
+	}
+	return sl
+}
+
 // Generate ASCII graphics of a randomly generated bot with a speech bubble
 func botsay(msg string) string {
 	var layers []*GFX
 	msgwidth := boxContentWidth
+	lineCount := strings.Count(strings.TrimSpace(msg), "\n") + 1
 	layers = append(layers, New(asciibot.Random(), 1, 1))
 	sl := splitWidthWords(msg, msgwidth)
 	boxX := 18
 	boxY := 1
-	layers = append(layers, New(bubble(min(msgwidth, len(msg))+7, len(sl)+2), boxX, boxY))
+	layers = append(layers, New(bubble(min(msgwidth, len(msg))+7, len(sl)+lineCount+1), boxX, boxY))
 	for i, s := range sl {
 		layers = append(layers, New(s, boxX+5, boxY+1+i))
 	}
@@ -225,5 +228,15 @@ func main() {
 			return
 		}
 	}
-	fmt.Println(botsay(strings.Join(args, " ")))
+	// Join all arguments to a single string
+	msg := strings.Join(args, " ")
+	// Read from /dev/stdin if "-" is given
+	if msg == "-" {
+		data, err := ioutil.ReadFile("/dev/stdin")
+		if err != nil {
+			panic(err)
+		}
+		msg = string(data)
+	}
+	fmt.Println(botsay(msg))
 }
