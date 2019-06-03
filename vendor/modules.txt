@@ -1,2 +1,10 @@
 # github.com/mattes/go-asciibot v0.0.0-20190314200458-26c3a522dfb9
 github.com/mattes/go-asciibot
+# github.com/mattn/go-colorable v0.1.2
+github.com/mattn/go-colorable
+# github.com/mattn/go-isatty v0.0.8
+github.com/mattn/go-isatty
+# github.com/xyproto/rainbow v0.0.0-20190603164209-9c2013bb3002
+github.com/xyproto/rainbow
+# golang.org/x/sys v0.0.0-20190602015325-4c4f7f33c9ed
+golang.org/x/sys/unix

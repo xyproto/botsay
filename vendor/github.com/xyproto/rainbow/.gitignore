@@ -1,0 +1,10 @@
+examples/banner/banner
+examples/print/print
+
+*.o
+*.so
+
+*.bak
+*.swp
+*.tmp
+*~
