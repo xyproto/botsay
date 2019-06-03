@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	boxContentWidth = 40
-	versionString   = "botsay 1.0.0"
+	boxContentWidth = 42
+	versionString   = "botsay 1.0.1"
 )
 
 type GFX struct {
