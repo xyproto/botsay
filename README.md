@@ -2,7 +2,7 @@
 
 Like cowsay, but with a small ASCII bot from [go-asciibot](https://github.com/mattes/go-asciibot).
 
-### Example
+### Examples
 
 Example output of `botsay -- $(fortune)`:
 
@@ -15,6 +15,19 @@ Example output of `botsay -- $(fortune)`:
       /| |\                                                      
      (0) (0)
 ```
+
+Example output of `botsay -- $(botsay;botsay;botsay)`:
+
+```
+    _._._          .--------------------------------------------.
+   -)O O(-         | )_( .--. |- -| '--' |_^_| o==|ooo|==o      |
+    \_0_/       --<| |___| // \\ _\\ //_ .===./` .--. /.- -.    |
+ .==|>o<|==:=L     | \ '--' "\_n_/" ,"|+ |". _\|+__|/_ ( )      |
+ '=c|___|          | __) (__ _._._ .--. -)ooo(- '--' \_=_/      |
+    ]| |[          | (m9\:::/\ /___\6 . /___\ . . ..:::::::. .  |
+   [_| |_]         '--------------------------------------------'
+```
+
 
 ### Installation
 
