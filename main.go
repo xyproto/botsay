@@ -12,7 +12,7 @@ import (
 
 const (
 	boxContentWidth = 42
-	versionString   = "botsay 1.1.0"
+	versionString   = "botsay 1.2.0"
 )
 
 // GFX is ASCII graphics as a string, and where to place it on the canvas
@@ -235,6 +235,8 @@ func main() {
 			rainbowMode = true
 			if len(args) > 1 {
 				args = args[1:]
+			} else {
+				args = []string{}
 			}
 		}
 	}
@@ -249,7 +251,7 @@ func main() {
 		msg = string(data)
 	}
 	if rainbowMode {
-		rw := rainbow.NewTruecolorWriter(3, 0.4, 2)
+		rw := rainbow.NewTruecolorWriter(3, 0.4, 10)
 		rw.Write([]byte(botsay(msg) + "\n"))
 	} else {
 		fmt.Println(botsay(msg))
