@@ -65,5 +65,5 @@ Output of `botsay 'Build complete'`:
 ## General info
 
 * License: MIT
-* Version: 1.2.0
+* Version: 1.2.1
 * Author: Alexander F. Rødseth &lt;xyproto@archlinux.org&gt;
