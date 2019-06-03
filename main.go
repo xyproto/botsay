@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/mattes/go-asciibot"
-	"math"
 	"os"
 	"strings"
 	"unicode"
@@ -73,6 +72,8 @@ func max(a, b int) int {
 	return b
 }
 
+// Return a character at (x,y) in a multiline string.
+// If anythings go wrong, or if (x,y) is out of bounds, return a space.
 func get(s string, x, y int) string {
 	if x < 0 || y < 0 {
 		return " "
@@ -122,23 +123,6 @@ func render(layers []*GFX) string {
 	return canvas
 }
 
-// Split a string by width, then trim spaces away from each string in the slice
-// Will try to avoid braking words.
-func splitWidth(s string, w int) []string {
-	splits := int(math.Ceil(float64(len(s)) / float64(w)))
-	var sl []string
-	pos := 0
-	for i := 0; i < splits; i++ {
-		if pos+w >= len(s) {
-			sl = append(sl, strings.TrimSpace(s[pos:]))
-			break
-		}
-		sl = append(sl, strings.TrimSpace(s[pos:pos+w]))
-		pos += w
-	}
-	return sl
-}
-
 // Split a string by words, then combine to form lines maximum w long
 func splitWidthWords(s string, w int) []string {
 	var sl []string
@@ -173,24 +157,25 @@ func splitWords(s string) []string {
 		letters    strings.Builder
 		tmp        string
 	)
+	lenS := len(s)
 	for i, r := range s {
 		splitpoint = false
 		switch r {
 		case '.', '!', ',', ':', '-', ' ', '?', ';', '\n':
 			// Check if the next character is not an end quote
-			if i+1 < len(s) && s[i+1] != '"' && s[i+1] != '\'' {
+			if i+1 < lenS && s[i+1] != '"' && s[i+1] != '\'' {
 				splitpoint = true
 			}
 		}
 		// Combine repeated dashes
-		if r == '-' && i+1 < len(s) && s[i+1] == '-' {
+		if r == '-' && i+1 < lenS && s[i+1] == '-' {
 			splitpoint = false
 		}
 		// Combine repeated dots
-		if r == '.' && i+1 < len(s) && s[i+1] == '.' {
+		if r == '.' && i+1 < lenS && s[i+1] == '.' {
 			splitpoint = false
 		}
-		if splitpoint || i == len(s) {
+		if splitpoint || i == lenS {
 			letters.WriteRune(r)
 			tmp = letters.String()
 			if len(tmp) > 0 {
@@ -213,7 +198,6 @@ func botsay(msg string) string {
 	var layers []*GFX
 	msgwidth := boxContentWidth
 	layers = append(layers, New(asciibot.Random(), 1, 1))
-	//sl := splitWidth(msg, msgwidth)
 	sl := splitWidthWords(msg, msgwidth)
 	boxX := 18
 	boxY := 1
