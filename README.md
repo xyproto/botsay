@@ -1,6 +1,8 @@
-# botsay
+# botsay [![Build Status](https://travis-ci.org/xyproto/botsay.svg?branch=master)](https://travis-ci.org/xyproto/botsay) [![GoDoc](https://godoc.org/github.com/xyproto/botsay?status.svg)](https://godoc.org/github.com/xyproto/botsay) [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://raw.githubusercontent.com/xyproto/botsay/master/LICENSE) [![Go Report Card](https://goreportcard.com/badge/github.com/xyproto/botsay)](https://goreportcard.com/report/github.com/xyproto/botsay)
 
 Like cowsay, but with a small ASCII bot from [go-asciibot](https://github.com/mattes/go-asciibot).
+
+![](img/botsay.png)
 
 ### Examples
 
