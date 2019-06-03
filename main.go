@@ -226,7 +226,7 @@ func main() {
 	}
 	if len(args) > 0 {
 		if args[0] == "--help" {
-			fmt.Println("usage: botsay [TEXT]")
+			fmt.Println("usage: botsay [-c] [TEXT or \"-\"]")
 			return
 		} else if args[0] == "--version" {
 			fmt.Println(versionString)
