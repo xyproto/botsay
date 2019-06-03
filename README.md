@@ -1,8 +1,6 @@
-# botsay [![Build Status](https://travis-ci.org/xyproto/botsay.svg?branch=master)](https://travis-ci.org/xyproto/botsay) [![GoDoc](https://godoc.org/github.com/xyproto/botsay?status.svg)](https://godoc.org/github.com/xyproto/botsay) [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://raw.githubusercontent.com/xyproto/botsay/master/LICENSE) [![Go Report Card](https://goreportcard.com/badge/github.com/xyproto/botsay)](https://goreportcard.com/report/github.com/xyproto/botsay)
+# botsay [![Build Status](https://travis-ci.org/xyproto/botsay.svg?branch=master)](https://travis-ci.org/xyproto/botsay) [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://raw.githubusercontent.com/xyproto/botsay/master/LICENSE) [![Go Report Card](https://goreportcard.com/badge/github.com/xyproto/botsay)](https://goreportcard.com/report/github.com/xyproto/botsay)
 
 Like cowsay, but with a small ASCII bot from [go-asciibot](https://github.com/mattes/go-asciibot).
-
-![](img/botsay.png)
 
 ### Examples
 
@@ -54,6 +52,12 @@ Output of `botsay 'Build complete'`:
     |_| |_|
 ```
 
+### Color support
+
+Use `-c` if you wish to colorize the output text with a rainbow-like effect:
+
+![](img/botsay.png)
+
 ### Installation
 
     go get -u github.com/xyproto/botsay
@@ -66,6 +70,6 @@ Output of `botsay 'Build complete'`:
 
 ## General info
 
-* License: MIT
 * Version: 1.2.1
+* License: MIT
 * Author: Alexander F. Rødseth &lt;xyproto@archlinux.org&gt;
