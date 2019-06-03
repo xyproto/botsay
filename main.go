@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/mattes/go-asciibot"
+	"github.com/xyproto/rainbow"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -201,20 +202,24 @@ func splitWidthWords(s string, w int) []string {
 // Generate ASCII graphics of a randomly generated bot with a speech bubble
 func botsay(msg string) string {
 	var layers []*GFX
+	trimmed := strings.TrimSpace(msg)
 	msgwidth := boxContentWidth
-	lineCount := strings.Count(strings.TrimSpace(msg), "\n") + 1
+	lineCount := strings.Count(trimmed, "\n") + 1
 	layers = append(layers, New(asciibot.Random(), 1, 1))
 	sl := splitWidthWords(msg, msgwidth)
 	boxX := 18
 	boxY := 1
-	layers = append(layers, New(bubble(min(msgwidth, len(msg))+7, len(sl)+lineCount+1), boxX, boxY))
-	for i, s := range sl {
-		layers = append(layers, New(s, boxX+5, boxY+1+i))
+	if len(trimmed) > 0 {
+		layers = append(layers, New(bubble(min(msgwidth, len(msg))+7, len(sl)+lineCount+1), boxX, boxY))
+		for i, s := range sl {
+			layers = append(layers, New(s, boxX+5, boxY+1+i))
+		}
 	}
 	return strings.TrimRightFunc(render(layers), unicode.IsSpace) + "\n"
 }
 
 func main() {
+	rainbowMode := false
 	args := os.Args[1:]
 	if len(args) > 0 && args[0] == "--" {
 		args = args[1:]
@@ -226,6 +231,11 @@ func main() {
 		} else if args[0] == "--version" {
 			fmt.Println(versionString)
 			return
+		} else if args[0] == "-c" {
+			rainbowMode = true
+			if len(args) > 1 {
+				args = args[1:]
+			}
 		}
 	}
 	// Join all arguments to a single string
@@ -238,5 +248,10 @@ func main() {
 		}
 		msg = string(data)
 	}
-	fmt.Println(botsay(msg))
+	if rainbowMode {
+		rw := rainbow.NewTruecolorWriter(3, 0.4, 2)
+		rw.Write([]byte(botsay(msg) + "\n"))
+	} else {
+		fmt.Println(botsay(msg))
+	}
 }
