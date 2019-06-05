@@ -81,23 +81,39 @@ func size(s string) (int, int) {
 
 // Return a character at (x,y) in a multiline string.
 // If anythings go wrong, or if (x,y) is out of bounds, return a space.
-func get(s string, x, y int) string {
+func get(s []rune, x, y, w, h int) rune {
 	if x < 0 || y < 0 {
-		return " "
+		return ' '
 	}
-	w, h := size(s)
 	if x >= w || y >= h {
-		return " "
+		return ' '
 	}
-	for i, line := range strings.Split(s, "\n") {
-		if i == y {
-			if x < len(line) {
-				return string(line[x])
-			}
-			return " "
+	// +1 to account for the trailing newlines
+	pos := y*w + x
+	if pos >= len(s) {
+		return ' '
+	}
+	r := s[pos]
+	switch r {
+	case '\n', '\t', '\r', '\v':
+		return ' '
+	default:
+		return r
+	}
+}
+
+// Convert from a multiline-string to an indexed slice of runes (y*w+x style)
+func toMap(s string, w int) []rune {
+	rs := make([]rune, 0)
+	for _, line := range strings.Split(s, "\n") {
+		rs = append(rs, []rune(line)...)
+		linelen := len(line)
+		if linelen < w {
+			// Fill out the rest of the line with spaces
+			rs = append(rs, []rune(strings.Repeat(" ", w-linelen))...)
 		}
 	}
-	return " "
+	return rs
 }
 
 // Like a blit function, but for ASCII graphics. Uses " " as the "transparent pixel".
@@ -106,16 +122,18 @@ func combine(a, b string, xoffset, yoffset int) string {
 	bW, bH := size(b)
 	maxW := max(aW, bW+xoffset)
 	maxH := max(aH, bH+yoffset)
+	aMap := toMap(a, aW)
+	bMap := toMap(b, bW)
 	var sb strings.Builder
 	for y := 0; y < maxH; y++ {
 		for x := 0; x < maxW; x++ {
-			if get(b, x-xoffset, y-yoffset) == " " {
-				sb.WriteString(get(a, x, y))
+			if get(bMap, x-xoffset, y-yoffset, bW, bH) == ' ' {
+				sb.WriteRune(get(aMap, x, y, aW, aH))
 			} else {
-				sb.WriteString(get(b, x-xoffset, y-yoffset))
+				sb.WriteRune(get(bMap, x-xoffset, y-yoffset, bW, bH))
 			}
 		}
-		sb.WriteString("\n")
+		sb.WriteRune('\n')
 	}
 	return sb.String()
 }
@@ -206,13 +224,15 @@ func botsay(msg string) string {
 	msgwidth := boxContentWidth
 	lineCount := strings.Count(trimmed, "\n") + 1
 	layers = append(layers, New(asciibot.Random(), 1, 1))
-	sl := splitWidthWords(msg, msgwidth)
+	sl := splitWidthWords(trimmed, msgwidth)
 	boxX := 18
 	boxY := 1
 	if len(trimmed) > 0 {
-		layers = append(layers, New(bubble(min(msgwidth, len(msg))+7, len(sl)+lineCount+1), boxX, boxY))
-		for i, s := range sl {
-			layers = append(layers, New(s, boxX+5, boxY+1+i))
+		layers = append(layers, New(bubble(min(msgwidth, len(trimmed))+7, len(sl)+lineCount+1), boxX, boxY))
+		counter := 0
+		for _, s := range sl {
+			layers = append(layers, New(s, boxX+5, boxY+1+counter))
+			counter++
 		}
 	}
 	return strings.TrimRightFunc(render(layers), unicode.IsSpace) + "\n"
@@ -235,6 +255,9 @@ func main() {
 			rainbowMode = true
 			if len(args) > 1 {
 				args = args[1:]
+				if len(args) > 0 && args[0] == "--" {
+					args = args[1:]
+				}
 			} else {
 				args = []string{}
 			}
@@ -248,7 +271,7 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		msg = string(data)
+		msg = strings.TrimSpace(string(data))
 	}
 	if rainbowMode {
 		rw := rainbow.NewTruecolorWriter(3, 0.4, 10)
