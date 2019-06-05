@@ -68,8 +68,12 @@ Use `-c` if you wish to colorize the output text with a rainbow-like effect:
 * `--version` - output the current version
 * `--help` - output brief help
 
+### Known issues
+
+* For longer pieces of text, there may be formatting issues.
+
 ## General info
 
-* Version: 1.2.1
+* Version: 1.2.2
 * License: MIT
 * Author: Alexander F. Rødseth &lt;xyproto@archlinux.org&gt;
