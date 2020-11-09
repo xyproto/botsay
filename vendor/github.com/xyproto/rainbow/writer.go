@@ -83,7 +83,7 @@ func (w *Writer) getColorer() (colorer, error) {
 	case ColorMode0:
 		return New0Colorer(), nil
 	default:
-		return nil, fmt.Errorf("Invalid colorer: [%d]", w.ColorMode)
+		return nil, fmt.Errorf("invalid colorer: [%d]", w.ColorMode)
 	}
 }
 

@@ -1,5 +1,5 @@
-examples/banner/banner
-examples/print/print
+cmd/banner/banner
+cmd/hello/hello
 
 *.o
 *.so
