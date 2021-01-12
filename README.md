@@ -74,6 +74,6 @@ Use `-c` if you wish to colorize the output text with a rainbow-like effect:
 
 ## General info
 
-* Version: 1.2.2
+* Version: 1.2.3
 * License: MIT
 * Author: Alexander F. Rødseth &lt;xyproto@archlinux.org&gt;
