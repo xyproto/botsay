@@ -4,6 +4,18 @@ Like cowsay, but with ASCII robots generated with [go-asciibot](https://github.c
 
 ### Examples
 
+Output of `botsay 'Build complete'`:
+
+```
+     .===.          .----------------.
+    //o o\\         | Build complete |
+    \\_v_//         '----------------'
+  .==|>o<|==:=L
+  '=c|___|
+    .'._.'.
+    |_| |_|
+```
+
 Output of `botsay -- $(fortune)`:
 
 ```
@@ -38,18 +50,6 @@ Output of `date --iso-8601 | botsay -`:
   ;   \___/   ;
       |_|_|
       /_|_\
-```
-
-Output of `botsay 'Build complete'`:
-
-```
-     .===.          .----------------.
-    //o o\\         | Build complete |
-    \\_v_//         '----------------'
-  .==|>o<|==:=L
-  '=c|___|
-    .'._.'.
-    |_| |_|
 ```
 
 ### Color support
