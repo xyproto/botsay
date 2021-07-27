@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 	"unicode"
+    "unicode/utf8"
 )
 
 const (
@@ -62,14 +63,20 @@ func bubble(w, h int) string {
 	return sb.String()
 }
 
+// Returns unicode string runes length, not bytes
+func uLen(s string) int {
+    return utf8.RuneCountInString(s)
+}
+
 // Return the width and height of a given ASCII art string
 func size(s string) (int, int) {
 	maxWidth := 0
 	maxHeight := 0
 	lineCounter := 0
 	for _, line := range strings.Split(s, "\n") {
-		if len(line) > maxWidth {
-			maxWidth = len(line)
+        l := uLen(line)
+		if l > maxWidth {
+			maxWidth = l
 		}
 		lineCounter++
 	}
@@ -107,7 +114,7 @@ func toMap(s string, w int) []rune {
 	rs := make([]rune, 0)
 	for _, line := range strings.Split(s, "\n") {
 		rs = append(rs, []rune(line)...)
-		linelen := len(line)
+		linelen := uLen(line)
 		if linelen < w {
 			// Fill out the rest of the line with spaces
 			rs = append(rs, []rune(strings.Repeat(" ", w-linelen))...)
@@ -155,7 +162,7 @@ func splitWords(s string) []string {
 		letters    strings.Builder
 		tmp        string
 	)
-	lenS := len(s)
+	lenS := uLen(s)
 	for i, r := range s {
 		splitpoint = false
 		switch r {
@@ -176,7 +183,7 @@ func splitWords(s string) []string {
 		if splitpoint || i == lenS {
 			letters.WriteRune(r)
 			tmp = letters.String()
-			if len(tmp) > 0 {
+			if uLen(tmp) > 0 {
 				words = append(words, tmp)
 			}
 			letters.Reset()
@@ -185,7 +192,7 @@ func splitWords(s string) []string {
 		}
 	}
 	tmp = strings.TrimSpace(letters.String())
-	if len(tmp) > 0 {
+	if uLen(tmp) > 0 {
 		words = append(words, tmp)
 	}
 	return words
@@ -196,13 +203,13 @@ func splitWidthWords(s string, w int) []string {
 	var sl []string
 	var line string
 	for _, word := range splitWords(s) {
-		if len(line)+len(word) < w {
+		if uLen(line)+uLen(word) < w {
 			line += word
 		} else {
 			trimmedLine := strings.TrimSpace(line)
 			if strings.HasSuffix(trimmedLine, "--") {
 				// Move the double dash to the beginning of the next line
-				trimmedLine = trimmedLine[:len(trimmedLine)-2]
+				trimmedLine = trimmedLine[:uLen(trimmedLine)-2]
 				sl = append(sl, trimmedLine)
 				line = "-- " + word
 			} else {
@@ -211,7 +218,7 @@ func splitWidthWords(s string, w int) []string {
 			}
 		}
 	}
-	if len(line) > 0 {
+	if uLen(line) > 0 {
 		sl = append(sl, strings.TrimSpace(line))
 	}
 	return sl
@@ -227,8 +234,8 @@ func botsay(msg string) string {
 	sl := splitWidthWords(trimmed, msgwidth)
 	boxX := 18
 	boxY := 1
-	if len(trimmed) > 0 {
-		layers = append(layers, New(bubble(min(msgwidth, len(trimmed))+7, len(sl)+lineCount+1), boxX, boxY))
+	if uLen(trimmed) > 0 {
+		layers = append(layers, New(bubble(min(msgwidth, uLen(trimmed))+7, len(sl)+lineCount+1), boxX, boxY))
 		counter := 0
 		for _, s := range sl {
 			layers = append(layers, New(s, boxX+5, boxY+1+counter))
