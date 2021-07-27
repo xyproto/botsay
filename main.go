@@ -8,12 +8,12 @@ import (
 	"os"
 	"strings"
 	"unicode"
-    "unicode/utf8"
+	"unicode/utf8"
 )
 
 const (
 	boxContentWidth = 42
-	versionString   = "botsay 1.2.3"
+	versionString   = "botsay 1.2.4"
 )
 
 // GFX is ASCII graphics as a string, and where to place it on the canvas
@@ -65,7 +65,7 @@ func bubble(w, h int) string {
 
 // Returns unicode string runes length, not bytes
 func uLen(s string) int {
-    return utf8.RuneCountInString(s)
+	return utf8.RuneCountInString(s)
 }
 
 // Return the width and height of a given ASCII art string
@@ -74,7 +74,7 @@ func size(s string) (int, int) {
 	maxHeight := 0
 	lineCounter := 0
 	for _, line := range strings.Split(s, "\n") {
-        l := uLen(line)
+		l := uLen(line)
 		if l > maxWidth {
 			maxWidth = l
 		}
