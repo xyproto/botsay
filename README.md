@@ -19,13 +19,13 @@ Output of `botsay 'Build complete'`:
 Output of `botsay -- $(fortune)`:
 
 ```
-       .-.           .------------------------------------------.
-    ._(u u)_.        | Nothing increases your golf score like   |
-      (_n_)       --<| witnesses.                               |
-    .=[::+]=.        '------------------------------------------'
-  ]=' [___] '=[
-      /| |\
-     (0) (0)
+       Y__           .--------------------------------------------.
+     _/- -\_         | If you think last Tuesday was a drag,      |
+      \_O_/       --<| wait till you see what happens tomorrow!   |
+   .==|>o<|==:=L     '--------------------------------------------'
+   '=c|___|
+      (   )
+     __) (__
 ```
 
 Output of `botsay -- $(botsay;botsay;botsay)`:
