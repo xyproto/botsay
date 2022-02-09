@@ -60,7 +60,9 @@ Use `-c` if you wish to colorize the output text with a rainbow-like effect:
 
 ### Installation
 
-    go get -u github.com/xyproto/botsay
+With Go 1.17 or later:
+
+    go install github.com/xyproto/botsay@latest
 
 ### Flags
 
