@@ -76,6 +76,6 @@ With Go 1.17 or later:
 
 ## General info
 
-* Version: 1.2.5
+* Version: 1.2.6
 * License: BSD-3
 * Author: Alexander F. Rødseth &lt;xyproto@archlinux.org&gt;
