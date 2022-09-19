@@ -1,4 +1,4 @@
-# botsay [![Build Status](https://travis-ci.org/xyproto/botsay.svg?branch=master)](https://travis-ci.org/xyproto/botsay) [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://raw.githubusercontent.com/xyproto/botsay/master/LICENSE) [![Go Report Card](https://goreportcard.com/badge/github.com/xyproto/botsay)](https://goreportcard.com/report/github.com/xyproto/botsay)
+# botsay [![License](https://img.shields.io/badge/license-BSD-green.svg?style=flat)](https://raw.githubusercontent.com/xyproto/botsay/master/LICENSE) [![Go Report Card](https://goreportcard.com/badge/github.com/xyproto/botsay)](https://goreportcard.com/report/github.com/xyproto/botsay)
 
 Like cowsay, but with ASCII robots generated with [go-asciibot](https://github.com/mattes/go-asciibot).
 
