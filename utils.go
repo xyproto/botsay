@@ -101,7 +101,7 @@ func combine(a, b string, xoffset, yoffset int) string {
 	return sb.String()
 }
 
-// Split a string into words, keeping punctuation and trailing spaces
+// splitWords can split a string into words, keeping punctuation and trailing spaces
 func splitWords(s string) []string {
 	var (
 		splitpoint bool
@@ -145,10 +145,12 @@ func splitWords(s string) []string {
 	return words
 }
 
-// Split a string by words, then combine to form lines maximum w long
+// splitWithWords can split a string by words, then combine to form lines maximum w long
 func splitWidthWords(s string, w int) []string {
-	var sl []string
-	var line string
+	var (
+		sl   []string
+		line string
+	)
 	for _, word := range splitWords(s) {
 		if uLen(line)+uLen(word) < w {
 			line += word
@@ -165,8 +167,8 @@ func splitWidthWords(s string, w int) []string {
 			}
 		}
 	}
-	if uLen(line) > 0 {
-		sl = append(sl, strings.TrimSpace(line))
+	if uLen(line) == 0 {
+		return sl
 	}
-	return sl
+	return append(sl, strings.TrimSpace(line))
 }
