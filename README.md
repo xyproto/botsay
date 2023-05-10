@@ -54,7 +54,7 @@ Output of `date --iso-8601 | botsay -`:
 
 ### Color support
 
-Use `-c` if you wish to colorize the output text with a rainbow-like effect:
+Use `-c` if you wish to colorize the output text with a synthwave/rainbow-like effect:
 
 ![](img/botsay.png)
 
