@@ -68,8 +68,8 @@ func botsay(msg string) string {
 	sl := splitWidthWords(trimmed, msgwidth)
 	boxX := 18
 	boxY := 1
-	if uLen(trimmed) > 0 {
-		layers = append(layers, New(bubble(min(msgwidth, uLen(trimmed))+7, len(sl)+lineCount+1), boxX, boxY))
+	if RuneLen(trimmed) > 0 {
+		layers = append(layers, New(bubble(min(msgwidth, RuneLen(trimmed))+7, len(sl)+lineCount+1), boxX, boxY))
 		counter := 0
 		for _, s := range sl {
 			layers = append(layers, New(s, boxX+5, boxY+1+counter))

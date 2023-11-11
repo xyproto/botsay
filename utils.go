@@ -5,22 +5,22 @@ import (
 	"unicode/utf8"
 )
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
+// func min(a, b int) int {
+// 	if a < b {
+// 		return a
+// 	}
+// 	return b
+// }
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
+// func max(a, b int) int {
+// 	if a > b {
+// 		return a
+// 	}
+// 	return b
+// }
 
 // Returns unicode string runes length, not bytes
-func uLen(s string) int {
+func RuneLen(s string) int {
 	return utf8.RuneCountInString(s)
 }
 
@@ -30,7 +30,7 @@ func size(s string) (int, int) {
 	maxHeight := 0
 	lineCounter := 0
 	for _, line := range strings.Split(s, "\n") {
-		l := uLen(line)
+		l := RuneLen(line)
 		if l > maxWidth {
 			maxWidth = l
 		}
@@ -70,7 +70,7 @@ func toMap(s string, w int) []rune {
 	rs := make([]rune, 0)
 	for _, line := range strings.Split(s, "\n") {
 		rs = append(rs, []rune(line)...)
-		linelen := uLen(line)
+		linelen := RuneLen(line)
 		if linelen < w {
 			// Fill out the rest of the line with spaces
 			rs = append(rs, []rune(strings.Repeat(" ", w-linelen))...)
@@ -109,7 +109,7 @@ func splitWords(s string) []string {
 		letters    strings.Builder
 		tmp        string
 	)
-	lenS := uLen(s)
+	lenS := RuneLen(s)
 	for i, r := range s {
 		splitpoint = false
 		switch r {
@@ -130,7 +130,7 @@ func splitWords(s string) []string {
 		if splitpoint || i == lenS {
 			letters.WriteRune(r)
 			tmp = letters.String()
-			if uLen(tmp) > 0 {
+			if RuneLen(tmp) > 0 {
 				words = append(words, tmp)
 			}
 			letters.Reset()
@@ -139,7 +139,7 @@ func splitWords(s string) []string {
 		}
 	}
 	tmp = strings.TrimSpace(letters.String())
-	if uLen(tmp) > 0 {
+	if RuneLen(tmp) > 0 {
 		words = append(words, tmp)
 	}
 	return words
@@ -152,13 +152,13 @@ func splitWidthWords(s string, w int) []string {
 		line string
 	)
 	for _, word := range splitWords(s) {
-		if uLen(line)+uLen(word) < w {
+		if RuneLen(line)+RuneLen(word) < w {
 			line += word
 		} else {
 			trimmedLine := strings.TrimSpace(line)
 			if strings.HasSuffix(trimmedLine, "--") {
 				// Move the double dash to the beginning of the next line
-				trimmedLine = trimmedLine[:uLen(trimmedLine)-2]
+				trimmedLine = trimmedLine[:RuneLen(trimmedLine)-2]
 				sl = append(sl, trimmedLine)
 				line = "-- " + word
 			} else {
@@ -167,7 +167,7 @@ func splitWidthWords(s string, w int) []string {
 			}
 		}
 	}
-	if uLen(line) == 0 {
+	if RuneLen(line) == 0 {
 		return sl
 	}
 	return append(sl, strings.TrimSpace(line))
