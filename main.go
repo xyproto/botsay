@@ -53,7 +53,7 @@ func bubble(w, h int) string {
 func render(layers []*GFX) string {
 	var canvas string
 	for _, gfx := range layers {
-		canvas = combine(canvas, gfx.ascii, gfx.x, gfx.y)
+		canvas = CombineArt(canvas, gfx.ascii, gfx.x, gfx.y)
 	}
 	return canvas
 }
@@ -65,7 +65,7 @@ func botsay(msg string) string {
 	msgwidth := boxContentWidth
 	lineCount := strings.Count(trimmed, "\n") + 1
 	layers = append(layers, New(asciibot.Random(), 1, 1))
-	sl := splitWidthWords(trimmed, msgwidth)
+	sl := SplitWidthWords(trimmed, msgwidth)
 	boxX := 18
 	boxY := 1
 	if RuneLen(trimmed) > 0 {

@@ -5,31 +5,17 @@ import (
 	"unicode/utf8"
 )
 
-// func min(a, b int) int {
-// 	if a < b {
-// 		return a
-// 	}
-// 	return b
-// }
-
-// func max(a, b int) int {
-// 	if a > b {
-// 		return a
-// 	}
-// 	return b
-// }
-
 // Returns unicode string runes length, not bytes
 func RuneLen(s string) int {
 	return utf8.RuneCountInString(s)
 }
 
 // Return the width and height of a given ASCII art string
-func size(s string) (int, int) {
+func Dimentions(asciiArt string) (int, int) {
 	maxWidth := 0
 	maxHeight := 0
 	lineCounter := 0
-	for _, line := range strings.Split(s, "\n") {
+	for _, line := range strings.Split(asciiArt, "\n") {
 		l := RuneLen(line)
 		if l > maxWidth {
 			maxWidth = l
@@ -43,7 +29,7 @@ func size(s string) (int, int) {
 }
 
 // Return a character at (x,y) in a multiline string.
-// If anythings go wrong, or if (x,y) is out of bounds, return a space.
+// If anything go wrong, or if (x,y) is out of bounds, return a space.
 func get(s []rune, x, y, w, h int) rune {
 	if x < 0 || y < 0 {
 		return ' '
@@ -65,7 +51,7 @@ func get(s []rune, x, y, w, h int) rune {
 	}
 }
 
-// Convert from a multiline-string to an indexed slice of runes (y*w+x style)
+// toMap can convert from a multiline-string to an indexed slice of runes (y*w+x style)
 func toMap(s string, w int) []rune {
 	rs := make([]rune, 0)
 	for _, line := range strings.Split(s, "\n") {
@@ -79,10 +65,11 @@ func toMap(s string, w int) []rune {
 	return rs
 }
 
-// Like a blit function, but for ASCII graphics. Uses " " as the "transparent pixel".
-func combine(a, b string, xoffset, yoffset int) string {
-	aW, aH := size(a)
-	bW, bH := size(b)
+// CombineArt is a bit like a blit function, but for ASCII graphics.
+// Uses ' ' as the "transparent pixel".
+func CombineArt(a, b string, xoffset, yoffset int) string {
+	aW, aH := Dimentions(a)
+	bW, bH := Dimentions(b)
 	maxW := max(aW, bW+xoffset)
 	maxH := max(aH, bH+yoffset)
 	aMap := toMap(a, aW)
@@ -101,8 +88,8 @@ func combine(a, b string, xoffset, yoffset int) string {
 	return sb.String()
 }
 
-// splitWords can split a string into words, keeping punctuation and trailing spaces
-func splitWords(s string) []string {
+// SplitWords can split a string into words, keeping punctuation and trailing spaces
+func SplitWords(s string) []string {
 	var (
 		splitpoint bool
 		words      []string
@@ -145,13 +132,13 @@ func splitWords(s string) []string {
 	return words
 }
 
-// splitWithWords can split a string by words, then combine to form lines maximum w long
-func splitWidthWords(s string, w int) []string {
+// SplitWithWords can split a string by words, then combine to form lines maximum w long
+func SplitWidthWords(s string, w int) []string {
 	var (
 		sl   []string
 		line string
 	)
-	for _, word := range splitWords(s) {
+	for _, word := range SplitWords(s) {
 		if RuneLen(line)+RuneLen(word) < w {
 			line += word
 		} else {
