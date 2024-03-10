@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strings"
 	"unicode"
@@ -108,7 +107,7 @@ func main() {
 	msg := strings.Join(args, " ")
 	// Read from /dev/stdin if "-" is given
 	if msg == "-" {
-		data, err := ioutil.ReadFile("/dev/stdin")
+		data, err := os.ReadFile("/dev/stdin")
 		if err != nil {
 			panic(err)
 		}
