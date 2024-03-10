@@ -12,7 +12,7 @@ import (
 
 const (
 	boxContentWidth = 42
-	versionString   = "botsay 1.2.6"
+	versionString   = "botsay 1.2.7"
 )
 
 // GFX is ASCII graphics as a string, and where to place it on the canvas
@@ -29,9 +29,12 @@ func New(ascii string, x, y int) *GFX {
 
 // Draw an ASCII bubble
 func bubble(w, h int) string {
-	var sb strings.Builder
+	var (
+		sb     strings.Builder
+		dashes = strings.Repeat("-", w-5)
+	)
 	sb.WriteString("   .")
-	sb.WriteString(strings.Repeat("-", w-5))
+	sb.WriteString(dashes)
 	sb.WriteString(".\n")
 	for i := 0; i < (h - 2); i++ {
 		if i == 1 {
@@ -43,7 +46,7 @@ func bubble(w, h int) string {
 		sb.WriteString("|\n")
 	}
 	sb.WriteString("   '")
-	sb.WriteString(strings.Repeat("-", w-5))
+	sb.WriteString(dashes)
 	sb.WriteString("'\n")
 	return sb.String()
 }
@@ -81,17 +84,18 @@ func botsay(msg string) string {
 func main() {
 	rainbowMode := false
 	args := os.Args[1:]
-	if len(args) > 0 && args[0] == "--" {
-		args = args[1:]
-	}
 	if len(args) > 0 {
-		if args[0] == "--help" {
+		if args[0] == "--" {
+			args = args[1:]
+		}
+		switch args[0] {
+		case "--help":
 			fmt.Println("usage: botsay [-c] [TEXT or \"-\"]")
 			return
-		} else if args[0] == "--version" {
+		case "--version":
 			fmt.Println(versionString)
 			return
-		} else if args[0] == "-c" {
+		case "-c":
 			rainbowMode = true
 			if len(args) > 1 {
 				args = args[1:]
