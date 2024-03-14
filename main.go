@@ -48,8 +48,6 @@ func bubble(w, h int) string {
 
 // render will combine several ASCII graphics layers (with a position each) into a single layer
 func render(layers []*GFX) string {
-	var canvas []string
-	// Determine the required dimensions of the canvas
 	maxWidth, maxHeight := 0, 0
 	for _, gfx := range layers {
 		gfxWidth, gfxHeight := Dimensions(gfx.ascii)
@@ -60,33 +58,34 @@ func render(layers []*GFX) string {
 			maxHeight = gfx.y + gfxHeight
 		}
 	}
-
-	// Initialize the canvas with spaces
-	canvas = make([]string, maxHeight)
+	canvas := make([][]rune, maxHeight)
 	for i := range canvas {
-		canvas[i] = strings.Repeat(" ", maxWidth)
+		canvas[i] = make([]rune, maxWidth)
+		for j := range canvas[i] {
+			canvas[i][j] = ' '
+		}
 	}
-
 	for _, gfx := range layers {
 		gfxLines := strings.Split(gfx.ascii, "\n")
 		for y, line := range gfxLines {
 			canvasY := gfx.y + y
 			if canvasY >= len(canvas) {
-				continue // Skip if this line is out of the canvas bounds
+				continue
 			}
 			for x, ch := range line {
 				canvasX := gfx.x + x
 				if canvasX >= len(canvas[canvasY]) {
-					continue // Skip if this character is out of the line bounds
+					continue
 				}
-				// Replace the character in the canvas
-				canvasLine := []rune(canvas[canvasY])
-				canvasLine[canvasX] = ch
-				canvas[canvasY] = string(canvasLine)
+				canvas[canvasY][canvasX] = ch
 			}
 		}
 	}
-	return strings.Join(canvas, "\n")
+	stringCanvas := make([]string, len(canvas))
+	for i, line := range canvas {
+		stringCanvas[i] = string(line)
+	}
+	return strings.Join(stringCanvas, "\n")
 }
 
 // botsay will generate ASCII graphics of the specified bot ID, and with a speech bubble
