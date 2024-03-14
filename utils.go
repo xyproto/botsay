@@ -11,7 +11,7 @@ func RuneLen(s string) int {
 }
 
 // Return the width and height of a given ASCII art string
-func Dimentions(asciiArt string) (int, int) {
+func Dimensions(asciiArt string) (int, int) {
 	maxWidth := 0
 	maxHeight := 0
 	lineCounter := 0
@@ -68,8 +68,8 @@ func toMap(s string, w int) []rune {
 // CombineArt is a bit like a blit function, but for ASCII graphics.
 // Uses ' ' as the "transparent pixel".
 func CombineArt(a, b string, xoffset, yoffset int) string {
-	aW, aH := Dimentions(a)
-	bW, bH := Dimentions(b)
+	aW, aH := Dimensions(a)
+	bW, bH := Dimensions(b)
 	maxW := max(aW, bW+xoffset)
 	maxH := max(aH, bH+yoffset)
 	aMap := toMap(a, aW)
@@ -158,4 +158,11 @@ func SplitWidthWords(s string, w int) []string {
 		return sl
 	}
 	return append(sl, strings.TrimSpace(line))
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
