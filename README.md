@@ -1,6 +1,6 @@
 # botsay [![License](https://img.shields.io/badge/license-BSD-green.svg?style=flat)](https://raw.githubusercontent.com/xyproto/botsay/master/LICENSE) [![Go Report Card](https://goreportcard.com/badge/github.com/xyproto/botsay)](https://goreportcard.com/report/github.com/xyproto/botsay)
 
-Like cowsay, but with ASCII robots generated with [go-asciibot](https://github.com/mattes/go-asciibot).
+Like cowsay, but with ASCII robots generated with [go-asciibot](https://github.com/mattes/go-asciibot), which is based on [asciibots](https://github.com/walsh9/asciibots), which is in turn based on [1k-asciibots](https://github.com/walsh9/1k-asciibots) which is inspired by the [Robot Factory](http://www.masters.me.uk/pocketeers/Htm-Designs/flipflopfaces.htm) game.
 
 ### Examples
 
