@@ -5,12 +5,12 @@ import (
 	"unicode/utf8"
 )
 
-// Returns unicode string runes length, not bytes
+// RuneLen returns the rune count, not the byte count
 func RuneLen(s string) int {
 	return utf8.RuneCountInString(s)
 }
 
-// Return the width and height of a given ASCII art string
+// Dimensions returns the width and height of a given ASCII art string
 func Dimensions(asciiArt string) (int, int) {
 	maxWidth := 0
 	maxHeight := 0
@@ -28,8 +28,8 @@ func Dimensions(asciiArt string) (int, int) {
 	return maxWidth, maxHeight
 }
 
-// Return a character at (x,y) in a multiline string.
-// If anything go wrong, or if (x,y) is out of bounds, return a space.
+// get returns a character at (x,y) in a multiline string.
+// If anything go wrong, or if (x,y) is out of bounds, it return a space rune.
 func get(s []rune, x, y, w, h int) rune {
 	if x < 0 || y < 0 {
 		return ' '
@@ -46,9 +46,8 @@ func get(s []rune, x, y, w, h int) rune {
 	switch r {
 	case '\n', '\t', '\r', '\v':
 		return ' '
-	default:
-		return r
 	}
+	return r
 }
 
 // toMap can convert from a multiline-string to an indexed slice of runes (y*w+x style)
@@ -63,29 +62,6 @@ func toMap(s string, w int) []rune {
 		}
 	}
 	return rs
-}
-
-// CombineArt is a bit like a blit function, but for ASCII graphics.
-// Uses ' ' as the "transparent pixel".
-func CombineArt(a, b string, xoffset, yoffset int) string {
-	aW, aH := Dimensions(a)
-	bW, bH := Dimensions(b)
-	maxW := max(aW, bW+xoffset)
-	maxH := max(aH, bH+yoffset)
-	aMap := toMap(a, aW)
-	bMap := toMap(b, bW)
-	var sb strings.Builder
-	for y := 0; y < maxH; y++ {
-		for x := 0; x < maxW; x++ {
-			if get(bMap, x-xoffset, y-yoffset, bW, bH) == ' ' {
-				sb.WriteRune(get(aMap, x, y, aW, aH))
-			} else {
-				sb.WriteRune(get(bMap, x-xoffset, y-yoffset, bW, bH))
-			}
-		}
-		sb.WriteRune('\n')
-	}
-	return sb.String()
 }
 
 // SplitWords can split a string into words, keeping punctuation and trailing spaces
@@ -132,7 +108,7 @@ func SplitWords(s string) []string {
 	return words
 }
 
-// SplitWithWords can split a string by words, then combine to form lines maximum w long
+// SplitWidthWords can split a string by words, then combine to form lines maximum w long
 func SplitWidthWords(s string, w int) []string {
 	var (
 		sl   []string

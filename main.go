@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"strings"
 	"unicode"
 
 	"github.com/mattes/go-asciibot"
+	"github.com/spf13/pflag"
 	"github.com/xyproto/rainbow"
 )
 
@@ -27,100 +27,131 @@ func New(ascii string, x, y int) *GFX {
 	return &GFX{ascii, x, y}
 }
 
-// Draw an ASCII bubble
+// bubble will draw an ASCII bubble
 func bubble(w, h int) string {
 	var (
 		sb     strings.Builder
 		dashes = strings.Repeat("-", w-5)
 	)
-	sb.WriteString("   .")
-	sb.WriteString(dashes)
-	sb.WriteString(".\n")
+	sb.WriteString("   ." + dashes + ".\n")
 	for i := 0; i < (h - 2); i++ {
 		if i == 1 {
 			sb.WriteString("--<|")
 		} else {
 			sb.WriteString("   |")
 		}
-		sb.WriteString(strings.Repeat(" ", w-5))
-		sb.WriteString("|\n")
+		sb.WriteString(strings.Repeat(" ", w-5) + "|\n")
 	}
-	sb.WriteString("   '")
-	sb.WriteString(dashes)
-	sb.WriteString("'\n")
+	sb.WriteString("   '" + dashes + "'\n")
 	return sb.String()
 }
 
-// Combine several ASCII graphics layers (with a position each) into one layer
+// render will combine several ASCII graphics layers (with a position each) into a single layer
 func render(layers []*GFX) string {
-	var canvas string
+	var canvas []string
+	// Determine the required dimensions of the canvas
+	maxWidth, maxHeight := 0, 0
 	for _, gfx := range layers {
-		canvas = CombineArt(canvas, gfx.ascii, gfx.x, gfx.y)
+		gfxWidth, gfxHeight := Dimensions(gfx.ascii)
+		if gfx.x+gfxWidth > maxWidth {
+			maxWidth = gfx.x + gfxWidth
+		}
+		if gfx.y+gfxHeight > maxHeight {
+			maxHeight = gfx.y + gfxHeight
+		}
 	}
-	return canvas
+
+	// Initialize the canvas with spaces
+	canvas = make([]string, maxHeight)
+	for i := range canvas {
+		canvas[i] = strings.Repeat(" ", maxWidth)
+	}
+
+	for _, gfx := range layers {
+		gfxLines := strings.Split(gfx.ascii, "\n")
+		for y, line := range gfxLines {
+			canvasY := gfx.y + y
+			if canvasY >= len(canvas) {
+				continue // Skip if this line is out of the canvas bounds
+			}
+			for x, ch := range line {
+				canvasX := gfx.x + x
+				if canvasX >= len(canvas[canvasY]) {
+					continue // Skip if this character is out of the line bounds
+				}
+				// Replace the character in the canvas
+				canvasLine := []rune(canvas[canvasY])
+				canvasLine[canvasX] = ch
+				canvas[canvasY] = string(canvasLine)
+			}
+		}
+	}
+	return strings.Join(canvas, "\n")
 }
 
-// Generate ASCII graphics of a randomly generated bot with a speech bubble
-func botsay(msg string) string {
+// botsay will generate ASCII graphics of the specified bot ID, and with a speech bubble
+func botsay(msg string, botID string) string {
 	var layers []*GFX
 	trimmed := strings.TrimSpace(msg)
-	msgwidth := boxContentWidth
+	msgWidth := boxContentWidth
 	lineCount := strings.Count(trimmed, "\n") + 1
-	layers = append(layers, New(asciibot.Random(), 1, 1))
-	sl := SplitWidthWords(trimmed, msgwidth)
+	botASCII, _ := asciibot.Generate(botID)
+	layers = append(layers, New(botASCII, 1, 1))
+	sl := SplitWidthWords(trimmed, msgWidth)
 	boxX := 18
 	boxY := 1
 	if RuneLen(trimmed) > 0 {
-		layers = append(layers, New(bubble(min(msgwidth, RuneLen(trimmed))+7, len(sl)+lineCount+1), boxX, boxY))
-		counter := 0
-		for _, s := range sl {
+		layers = append(layers, New(bubble(min(msgWidth, RuneLen(trimmed))+7, len(sl)+lineCount+1), boxX, boxY))
+		for counter, s := range sl {
 			layers = append(layers, New(s, boxX+5, boxY+1+counter))
-			counter++
 		}
 	}
 	return strings.TrimRightFunc(render(layers), unicode.IsSpace) + "\n"
 }
 
 func main() {
-	rainbowMode := false
-	args := os.Args[1:]
-	if len(args) > 0 {
-		if args[0] == "--" {
-			args = args[1:]
-		}
-		switch args[0] {
-		case "--help":
-			fmt.Println("usage: botsay [-c] [TEXT or \"-\"]")
-			return
-		case "--version":
-			fmt.Println(versionString)
-			return
-		case "-c":
-			rainbowMode = true
-			if len(args) > 1 {
-				args = args[1:]
-				if len(args) > 0 && args[0] == "--" {
-					args = args[1:]
-				}
-			} else {
-				args = []string{}
-			}
-		}
+	var (
+		rainbowMode bool
+		customBotID string
+		printID     bool
+		versionFlag bool
+		helpFlag    bool
+	)
+
+	pflag.BoolVarP(&rainbowMode, "color", "c", false, "Enable rainbow mode")
+	pflag.StringVarP(&customBotID, "id", "i", "", "Specify a custom bot ID to use for generating the ASCII art.")
+	pflag.BoolVarP(&printID, "print", "p", false, "Print the bot's ID after generating the ASCII art.")
+	pflag.BoolVar(&versionFlag, "version", false, "Print the version and exit")
+	pflag.BoolVarP(&helpFlag, "help", "h", false, "Show this help message")
+	pflag.Parse()
+
+	if versionFlag {
+		fmt.Println(versionString)
+		return
 	}
-	// Join all arguments to a single string
+
+	if helpFlag {
+		pflag.Usage()
+		return
+	}
+
+	botID := customBotID
+	if botID == "" {
+		botID = asciibot.RandomID()
+	}
+
+	args := pflag.Args()
 	msg := strings.Join(args, " ")
-	// Read from /dev/stdin if "-" is given
-	if msg == "-" {
-		data, err := os.ReadFile("/dev/stdin")
-		if err != nil {
-			panic(err)
-		}
-		msg = strings.TrimSpace(string(data))
-	}
+	output := botsay(msg, botID)
+
 	if rainbowMode {
 		rw := rainbow.NewTruecolorWriter(3, 0.4, 10)
-		rw.Write([]byte(botsay(msg) + "\n"))
+		rw.Write([]byte(output + "\n"))
 	} else {
-		fmt.Println(botsay(msg))
+		fmt.Println(output)
+	}
+
+	if printID {
+		fmt.Println("Bot ID:", botID)
 	}
 }
