@@ -113,6 +113,7 @@ func botsay(msg string, botID string) string {
 
 func main() {
 	var (
+        onlyFlag    bool
 		rainbowMode bool
 		customBotID string
 		printID     bool
@@ -120,6 +121,7 @@ func main() {
 		helpFlag    bool
 	)
 
+    pflag.BoolVarP(&onlyFlag, "only", "o", false, "Only print robot")
 	pflag.BoolVarP(&rainbowMode, "color", "c", false, "Enable rainbow mode")
 	pflag.StringVarP(&customBotID, "id", "i", "", "Specify a custom bot ID to use for generating the ASCII art.")
 	pflag.BoolVarP(&printID, "print", "p", false, "Print the bot's ID after generating the ASCII art.")
@@ -145,7 +147,7 @@ func main() {
 	args := pflag.Args()
 	msg := strings.Join(args, " ")
 
-    if msg == "" { 
+    if msg == "" && !onlyFlag { 
         var n int
         var err error
         buff := make([]byte, stdinBuffLen)
@@ -157,6 +159,8 @@ func main() {
 
             msg += string(buff[:n])
         }
+    } else if onlyFlag { 
+        msg = ""
     }
 
 	output := botsay(msg, botID)
