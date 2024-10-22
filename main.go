@@ -14,7 +14,7 @@ import (
 
 const (
 	boxContentWidth = 42
-	versionString   = "botsay 1.3.0"
+	versionString   = "botsay 1.4.0"
 	stdinBuffLen    = 16
 )
 

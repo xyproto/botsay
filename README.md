@@ -1,6 +1,6 @@
-# botsay [![License](https://img.shields.io/badge/license-BSD-green.svg?style=flat)](https://raw.githubusercontent.com/xyproto/botsay/master/LICENSE) [![Go Report Card](https://goreportcard.com/badge/github.com/xyproto/botsay)](https://goreportcard.com/report/github.com/xyproto/botsay)
+# botsay [![License](https://img.shields.io/badge/license-BSD-green.svg?style=flat)](https://raw.githubusercontent.com/xyproto/botsay/main/LICENSE) [![Go Report Card](https://goreportcard.com/badge/github.com/xyproto/botsay)](https://goreportcard.com/report/github.com/xyproto/botsay)
 
-Like cowsay, but with ASCII robots generated with [go-asciibot](https://github.com/mattes/go-asciibot), which is based on [asciibots](https://github.com/walsh9/asciibots), which is in turn based on [1k-asciibots](https://github.com/walsh9/1k-asciibots) which is inspired by the [Robot Factory](http://www.masters.me.uk/pocketeers/Htm-Designs/flipflopfaces.htm) game.
+Like cowsay, but with ASCII robots generated with [go-asciibot](https://github.com/mattes/go-asciibot), which is based on [asciibots](https://github.com/walsh9/asciibots), which is in turn based on [1k-asciibots](https://github.com/walsh9/1k-asciibots) which is inspired by the [Robot Factory](http://www.mains.me.uk/pocketeers/Htm-Designs/flipflopfaces.htm) game.
 
 ### Examples
 
@@ -76,6 +76,6 @@ With Go 1.17 or later:
 
 ## General info
 
-* Version: 1.3.0
+* Version: 1.4.0
 * License: BSD-3
 * Author: Alexander F. Rødseth &lt;xyproto@archlinux.org&gt;
