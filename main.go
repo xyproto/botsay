@@ -113,20 +113,22 @@ func botsay(msg string, botID string) string {
 
 func main() {
 	var (
-		onlyFlag    bool
-		rainbowMode bool
-		customBotID string
+		msg         string
+		botID       string
 		printID     bool
-		versionFlag bool
+		rainbowMode bool
+		onlyFlag    bool
 		helpFlag    bool
+		versionFlag bool
 	)
 
-	pflag.BoolVarP(&onlyFlag, "only", "o", false, "Only print robot")
-	pflag.BoolVarP(&rainbowMode, "color", "c", false, "Enable rainbow mode")
-	pflag.StringVarP(&customBotID, "id", "i", "", "Specify a custom bot ID to use for generating the ASCII art.")
+	pflag.StringVarP(&botID, "id", "i", "", "Specify a custom bot ID to use for generating the ASCII art.")
 	pflag.BoolVarP(&printID, "print", "p", false, "Print the bot's ID after generating the ASCII art.")
-	pflag.BoolVar(&versionFlag, "version", false, "Print the version and exit")
+	pflag.BoolVarP(&rainbowMode, "color", "c", false, "Enable rainbow mode")
+	pflag.BoolVarP(&onlyFlag, "only", "o", false, "Only print robot")
 	pflag.BoolVarP(&helpFlag, "help", "h", false, "Show this help message")
+	pflag.BoolVar(&versionFlag, "version", false, "Print the version and exit")
+
 	pflag.Parse()
 
 	if versionFlag {
@@ -139,28 +141,18 @@ func main() {
 		return
 	}
 
-	botID := customBotID
 	if botID == "" {
 		botID = asciibot.RandomID()
 	}
 
-	args := pflag.Args()
-	msg := strings.Join(args, " ")
-
-	if msg == "" && !onlyFlag {
-		var n int
-		var err error
-		buff := make([]byte, stdinBuffLen)
-
-		reader := io.Reader(os.Stdin)
-
-		for err = nil; err == nil; {
-			n, err = reader.Read(buff)
-
-			msg += string(buff[:n])
+	if !onlyFlag {
+		// Set msg to the given arguments, if provided
+		if msg = strings.Join(pflag.Args(), " "); msg == "" {
+			// If not, read msg from stdin
+			if input, err := io.ReadAll(os.Stdin); err == nil {
+				msg = string(input)
+			}
 		}
-	} else if onlyFlag {
-		msg = ""
 	}
 
 	output := botsay(msg, botID)
