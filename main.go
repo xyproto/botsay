@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 	"unicode"
+    "io"
+    "os"
 
 	"github.com/mattes/go-asciibot"
 	"github.com/spf13/pflag"
@@ -13,6 +15,7 @@ import (
 const (
 	boxContentWidth = 42
 	versionString   = "botsay 1.3.0"
+    stdinBuffLen    = 16
 )
 
 // GFX is ASCII graphics as a string, and where to place it on the canvas
@@ -141,6 +144,21 @@ func main() {
 
 	args := pflag.Args()
 	msg := strings.Join(args, " ")
+
+    if msg == "" { 
+        var n int
+        var err error
+        buff := make([]byte, stdinBuffLen)
+
+        reader := io.Reader(os.Stdin)
+
+        for err = nil; err == nil; { 
+            n, err = reader.Read(buff)
+
+            msg += string(buff[:n])
+        }
+    }
+
 	output := botsay(msg, botID)
 
 	if rainbowMode {
