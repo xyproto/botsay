@@ -9,6 +9,7 @@ import (
 
 	"github.com/mattes/go-asciibot"
 	"github.com/spf13/pflag"
+	"github.com/xyproto/files"
 	"github.com/xyproto/rainbow"
 )
 
@@ -116,7 +117,6 @@ func main() {
 		botID       string
 		printID     bool
 		rainbowMode bool
-		onlyFlag    bool
 		helpFlag    bool
 		versionFlag bool
 	)
@@ -124,7 +124,6 @@ func main() {
 	pflag.StringVarP(&botID, "id", "i", "", "Specify a custom bot ID to use for generating the ASCII art.")
 	pflag.BoolVarP(&printID, "print", "p", false, "Print the bot's ID after generating the ASCII art.")
 	pflag.BoolVarP(&rainbowMode, "color", "c", false, "Enable rainbow mode")
-	pflag.BoolVarP(&onlyFlag, "only", "o", false, "Only print robot")
 	pflag.BoolVarP(&helpFlag, "help", "h", false, "Show this help message")
 	pflag.BoolVar(&versionFlag, "version", false, "Print the version and exit")
 
@@ -144,14 +143,13 @@ func main() {
 		botID = asciibot.RandomID()
 	}
 
-	if !onlyFlag {
-		// Set msg to the given arguments, if provided
-		if msg = strings.Join(pflag.Args(), " "); msg == "" {
-			// If not, read msg from stdin
-			if input, err := io.ReadAll(os.Stdin); err == nil {
-				msg = string(input)
-			}
+	// Read data from stdin if there is data waiting there
+	if files.DataReadyOnStdin() {
+		if input, err := io.ReadAll(os.Stdin); err == nil {
+			msg = string(input)
 		}
+	} else { // Set msg to the given arguments, if any
+		msg = strings.Join(pflag.Args(), " ")
 	}
 
 	output := botsay(msg, botID)

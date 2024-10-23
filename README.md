@@ -67,7 +67,6 @@ With Go 1.17 or later:
 ### Flags
 
 * `-c` - color the output with rainbow-like colors
-* `-o` - only output robot, suppress message
 * `-i` - specify a custom bot ID to use for generating the ASCII art.
 * `-p` - print the bot's ID after generating the ASCII art.
 * `--version` - output the current version
