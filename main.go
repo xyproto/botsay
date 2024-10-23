@@ -143,12 +143,14 @@ func main() {
 		botID = asciibot.RandomID()
 	}
 
-	// Read data from stdin if there is data waiting there
-	if files.DataReadyOnStdin() {
+	lenargs := len(pflag.Args())
+
+	// Read data from stdin if there is data waiting there, or if the last given argument is "-"
+	if files.DataReadyOnStdin() || (lenargs > 0 && pflag.Args()[lenargs-1] == "-") {
 		if input, err := io.ReadAll(os.Stdin); err == nil {
 			msg = string(input)
 		}
-	} else { // Set msg to the given arguments, if any
+	} else { // Set msg to the given arguments (if any)
 		msg = strings.Join(pflag.Args(), " ")
 	}
 
