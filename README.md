@@ -28,7 +28,7 @@ Output of `fortune | botsay`:
      __) (__
 ```
 
-Output of `botsay -- $(botsay -o;botsay -o;botsay -o)`:
+Output of `botsay -- $(botsay;botsay;botsay)`:
 
 ```
      _._._          .--------------------------------------------.
@@ -40,7 +40,7 @@ Output of `botsay -- $(botsay -o;botsay -o;botsay -o)`:
     [_| |_]         '--------------------------------------------'
 ```
 
-Output of `date --iso-8601 | botsay`:
+Output of `date --iso-8601 | botsay -`:
 
 ```
       .---.          .-------------.
@@ -78,6 +78,6 @@ With Go 1.17 or later:
 
 ## General info
 
-* Version: 1.4.0
+* Version: 1.4.1
 * License: BSD-3
 * Author: Alexander F. Rødseth &lt;xyproto@archlinux.org&gt;
