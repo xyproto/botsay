@@ -14,8 +14,8 @@ import (
 )
 
 const (
+	versionString   = "botsay 1.4.1"
 	boxContentWidth = 42
-	versionString   = "botsay 1.4.0"
 )
 
 // GFX is ASCII graphics as a string, and where to place it on the canvas
