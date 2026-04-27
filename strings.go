@@ -36,7 +36,7 @@ func SplitWords(s string) []string {
 		letters    strings.Builder
 		tmp        string
 	)
-	lenS := RuneLen(s)
+	lenS := len(s)
 	for i, r := range s {
 		splitpoint = false
 		switch r {
