@@ -60,7 +60,7 @@ Use `-c` if you wish to colorize the output text with a synthwave/rainbow-like e
 
 ### Installation
 
-With Go 1.17 or later:
+With Go 1.25 or later:
 
     go install github.com/xyproto/botsay@latest
 
@@ -78,6 +78,6 @@ With Go 1.17 or later:
 
 ## General info
 
-* Version: 1.4.1
+* Version: 1.4.2
 * License: BSD-3
 * Author: Alexander F. Rødseth &lt;xyproto@archlinux.org&gt;
