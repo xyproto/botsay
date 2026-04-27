@@ -99,10 +99,3 @@ func SplitWidthWords(s string, w int) []string {
 	}
 	return append(sl, strings.TrimSpace(line))
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
