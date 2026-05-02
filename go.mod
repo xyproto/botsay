@@ -6,7 +6,7 @@ require (
 	github.com/mattes/go-asciibot v0.0.0-20190603170252-3fa6d766c482
 	github.com/spf13/pflag v1.0.10
 	github.com/xyproto/files v1.10.8
-	github.com/xyproto/rainbow v1.0.0
+	github.com/xyproto/rainbow v1.0.1
 )
 
 require (

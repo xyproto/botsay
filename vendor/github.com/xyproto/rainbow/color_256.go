@@ -19,7 +19,7 @@ func (c *color256) format() []byte {
 
 	// Support for grayscale colors
 	if c.R == c.G && c.G == c.B && int(c.R) > 232 {
-		return []byte(fmt.Sprintf("\x1b[38;5;%dm", int(c.R)))
+		return fmt.Appendf(nil, "\x1b[38;5;%dm", int(c.R))
 	}
 
 	// Math for 256: We use the closest value possible
@@ -27,7 +27,7 @@ func (c *color256) format() []byte {
 	g6 := (uint16(c.G) * 3) / 255
 	b6 := (uint16(c.B) * 3) / 255
 	i := 36*r6 + 6*g6 + b6
-	return []byte(fmt.Sprintf("\x1b[38;5;%dm", i))
+	return fmt.Appendf(nil, "\x1b[38;5;%dm", i)
 }
 
 func (c *color256) reset() []byte {

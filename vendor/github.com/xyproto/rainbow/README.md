@@ -4,5 +4,5 @@ A fork of [lolgopher](https://github.com/kris-nova/lolgopher) which is based on 
 
 Can colorize multiline-strings in rainbow-like colors, for the terminal.
 
-* Version: 1.0.0
+* Version: 1.0.1
 * License: Apache 2

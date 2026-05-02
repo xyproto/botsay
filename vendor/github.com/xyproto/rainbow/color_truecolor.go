@@ -16,7 +16,7 @@ func (c *truecolor) rainbow(freq float64, i float64) {
 }
 
 func (c *truecolor) format() []byte {
-	return []byte(fmt.Sprintf("\x1b[38;2;%d;%d;%dm", c.R, c.G, c.B))
+	return fmt.Appendf(nil, "\x1b[38;2;%d;%d;%dm", c.R, c.G, c.B)
 }
 
 func (c *truecolor) reset() []byte {
