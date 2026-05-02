@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	versionString   = "botsay 1.4.1"
+	versionString   = "botsay 1.4.4"
 	boxContentWidth = 42
 )
 

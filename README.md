@@ -78,6 +78,6 @@ With Go 1.25 or later:
 
 ## General info
 
-* Version: 1.4.3
+* Version: 1.4.4
 * License: BSD-3
 * Author: Alexander F. Rødseth &lt;xyproto@archlinux.org&gt;
