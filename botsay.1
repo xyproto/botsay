@@ -1,0 +1,36 @@
+.\"             -*-Nroff-*-
+.\"
+.TH "botsay" 1 "2 May 2026" "botsay" "User Commands"
+.SH NAME
+botsay \- a utility for outputting text with an ASCII art robot
+.SH SYNOPSIS
+.B botsay
+[\-i ID] [\-p] [\-c] [\-h] [\-\-version] [MESSAGE]
+.SH DESCRIPTION
+.B botsay
+generates an ASCII art robot with a speech bubble containing a message.
+If no message is provided as an argument, it reads from standard input.
+If no ID is provided, a random bot ID is used.
+.SH OPTIONS
+.TP
+.B \-i, \-\-id ID
+Specify a custom bot ID to use for generating the ASCII art.
+.TP
+.B \-p, \-\-print
+Print the bot's ID after generating the ASCII art.
+.TP
+.B \-c, \-\-color
+Enable rainbow mode (truecolor).
+.TP
+.B \-h, \-\-help
+Show a help message and exit.
+.TP
+.B \-\-version
+Print the version and exit.
+.SH EXAMPLES
+.B botsay 'Hello, world!'
+.PP
+.B echo "Hello from stdin" | botsay -c
+.SH AUTHOR
+.B botsay
+was written by Alexander F. Rødseth <xyproto@archlinux.org>
