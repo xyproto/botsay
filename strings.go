@@ -15,7 +15,7 @@ func Dimensions(asciiArt string) (int, int) {
 	maxWidth := 0
 	maxHeight := 0
 	lineCounter := 0
-	for _, line := range strings.Split(asciiArt, "\n") {
+	for line := range strings.SplitSeq(asciiArt, "\n") {
 		l := RuneLen(line)
 		if l > maxWidth {
 			maxWidth = l
